@@ -96,6 +96,7 @@ class BungaController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        return $bungas->foto;
         // Hapus gambar lama di Cloudinary jika ada
         if ($bungas->foto) {
             $publicId = basename($bungas->foto, '.' . pathinfo($bungas->foto, PATHINFO_EXTENSION));
