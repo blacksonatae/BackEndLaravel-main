@@ -88,16 +88,27 @@ class BungaController extends Controller
         ]);
 
         $bungas = Bunga::find($id);
-        $filePath = 'public/'. $bungas->foto;
-
-        // Upload gambar baru
-        $path = $request->file('foto')->store('images', 'public');
-        $validate['foto'] = $path;
-
-        // Hapus gambar lama
-        if (Storage::exists($filePath)) {
-            Storage::delete($filePath);
+        
+        if (!$bungas) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data bunga tidak ditemukan'
+            ], Response::HTTP_NOT_FOUND);
         }
+
+        // Hapus gambar lama di Cloudinary jika ada
+        if ($bungas->foto) {
+            $publicId = basename($bungas->foto, '.' . pathinfo($bungas->foto, PATHINFO_EXTENSION));
+            Cloudinary::destroy($publicId);
+        }
+
+        // Upload gambar baru ke Cloudinary
+        $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath(), [
+            'folder' => 'uploads/bunga',
+        ]);
+
+        $validate['foto'] = $uploadedFile->getSecurePath(); // URL file baru
+
 
 
         $result = Bunga::where('id', $id)->update($validate);
