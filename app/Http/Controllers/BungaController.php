@@ -118,8 +118,8 @@ class BungaController extends Controller
             $data['success'] = true;
             $data['message'] = "Data bunga berhasil diupdate";
             $data['result'] = $result;
-            return response()->json($data, Response::HTTP_OK);*/
-        }
+            return response()->json($data, Response::HTTP_OK);
+        }*/
     }
 
     /**
