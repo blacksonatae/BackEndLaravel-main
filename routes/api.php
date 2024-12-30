@@ -22,3 +22,6 @@ Route::get('logout', [AuthController::class, 'logout']);
 Route::post('contact', [ContactController::class, 'store'] );
 
 Route::get('bunga', [BungaController::class, 'index'] );
+Route::get('/test-env', function () {
+    return response()->json(['token' => env('BLOB_READ_WRITE_TOKEN')]);
+});
