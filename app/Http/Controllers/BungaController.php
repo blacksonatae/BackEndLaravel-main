@@ -64,7 +64,7 @@ class BungaController extends Controller
             }*/
         }
 
-        $/*result = Bunga::create($validate); //simpan ke tabel bunga
+        /*$result = Bunga::create($validate); //simpan ke tabel bunga
         if($result){
             $data['success'] = true;
             $data['message'] = "Bunga berhasil disimpan";
