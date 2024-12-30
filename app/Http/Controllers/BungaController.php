@@ -6,8 +6,7 @@ use App\Models\Bunga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Http;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class BungaController extends Controller
 {
@@ -41,38 +40,24 @@ class BungaController extends Controller
             'nama_bunga' => 'required',
             'deskripsi' => 'required|max:10000'
         ]);
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
 
-            \Log::info('Token:', ['token' => env('BLOB_READ_WRITE_TOKEN')]);
-            \Log::info('File Upload:', ['file' => $file->getClientOriginalName()]);
+        if($request->hasFile('foto')) {
+            $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath(), [
+                'folder' => 'uploads/bunga',
+            ]);
 
-
-            // Unggah ke Vercel Blob
-            /*return env('BLOB_READ_WRITE_TOKEN'). " ". $file->getClientOriginalName();*/
-            /*$response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
-            ])->attach(
-                'file', file_get_contents($file->getRealPath()), $file->getClientOriginalName()
-            )->post('https://api.vercel.com/v1/blob');
-
-            if ($response->successful()) {
-                $blobData = $response->json();
-                $validate['foto'] = $blobData['url']; // Simpan URL blob ke database
-            } else {
-                return response()->json(['error' => 'Failed to upload to Vercel Blob'], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }*/
+            // Ambil URL aman dan public_id untuk file yang diunggah
+            $validate['foto'] = $uploadedFile->getSecurePath(); // URL aman
+            $filePublicId = $uploadedFile->getPublicId();       // Public ID
         }
 
-        /*$result = Bunga::create($validate); //simpan ke tabel bunga
+        $result = Bunga::create($validate); //simpan ke tabel bunga
         if($result){
             $data['success'] = true;
             $data['message'] = "Bunga berhasil disimpan";
             $data['result'] = $result;
             return response()->json($data, Response::HTTP_CREATED);
-        }*/
-
-        return env('BLOB_READ_WRITE_TOKEN'). " ". $file->getClientOriginalName();
+        }
     }
 
     /**
