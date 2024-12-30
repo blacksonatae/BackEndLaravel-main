@@ -41,8 +41,8 @@ class BungaController extends Controller
             'nama_bunga' => 'required',
             'deskripsi' => 'required|max:10000'
         ]);
-
-        if ($request->hasFile('foto')) {
+        return env('BLOB_READ_WRITE_TOKEN');
+        /*if ($request->hasFile('foto')) {
             $file = $request->file('foto');
 
             // Unggah ke Vercel Blob
@@ -67,7 +67,7 @@ class BungaController extends Controller
             $data['message'] = "Bunga berhasil disimpan";
             $data['result'] = $result;
             return response()->json($data, Response::HTTP_CREATED);
-        }
+        }*/
     }
 
     /**
