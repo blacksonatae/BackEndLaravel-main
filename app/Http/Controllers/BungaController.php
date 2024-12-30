@@ -39,9 +39,22 @@ class BungaController extends Controller
             'deskripsi' => 'required|max:10000'
         ]);
 
-        if($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('images', 'public');
-            $validate['foto'] = $path; // Add file path to the validated data
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+
+            // Unggah ke Vercel Blob
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
+            ])->attach(
+                'file', file_get_contents($file->getRealPath()), $file->getClientOriginalName()
+            )->post('https://api.vercel.com/v1/blob');
+
+            if ($response->successful()) {
+                $blobData = $response->json();
+                $validate['foto'] = $blobData['url']; // Simpan URL blob ke database
+            } else {
+                return response()->json(['error' => 'Failed to upload to Vercel Blob'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
         }
 
         $result = Bunga::create($validate); //simpan ke tabel bunga
