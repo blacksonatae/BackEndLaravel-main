@@ -88,7 +88,6 @@ class BungaController extends Controller
         ]);
 
         $bungas = Bunga::find($id);
-
         if (!$bungas) {
             return response()->json([
                 'success' => false,
@@ -96,15 +95,18 @@ class BungaController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        return $bungas->foto;
         // Hapus gambar lama di Cloudinary jika ada
         if ($bungas->foto) {
-            $publicId = basename($bungas->foto, '.' . pathinfo($bungas->foto, PATHINFO_EXTENSION));
-            return $publicId;
-            /*Cloudinary::destroy($publicId);*/
+            // Ekstrak public_id dari URL
+            $fileUrl = $bungas->foto;
+            $publicId = substr($fileUrl, strpos($fileUrl, 'uploads/bunga/'), strrpos($fileUrl, '.') - strpos($fileUrl, 'uploads/bunga/'));
+
+            // Hapus file lama di Cloudinary
+            Cloudinary::destroy($publicId);
         }
 
-        /*// Upload gambar baru ke Cloudinary
+
+        // Upload gambar baru ke Cloudinary
         $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath(), [
             'folder' => 'uploads/bunga',
         ]);
@@ -120,7 +122,7 @@ class BungaController extends Controller
             $data['message'] = "Data bunga berhasil diupdate";
             $data['result'] = $result;
             return response()->json($data, Response::HTTP_OK);
-        }*/
+        }
     }
 
     /**
