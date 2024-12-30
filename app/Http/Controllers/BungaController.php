@@ -46,6 +46,7 @@ class BungaController extends Controller
             $file = $request->file('foto');
 
             // Unggah ke Vercel Blob
+            return env('BLOB_READ_WRITE_TOKEN');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
             ])->attach(
