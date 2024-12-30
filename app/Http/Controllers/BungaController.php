@@ -49,7 +49,7 @@ class BungaController extends Controller
 
 
             // Unggah ke Vercel Blob
-            return env('BLOB_READ_WRITE_TOKEN');
+            return env('BLOB_READ_WRITE_TOKEN'). " ". $file->getClientOriginalName();
             /*$response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
             ])->attach(
