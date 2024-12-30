@@ -41,13 +41,16 @@ class BungaController extends Controller
             'nama_bunga' => 'required',
             'deskripsi' => 'required|max:10000'
         ]);
-        return env('BLOB_READ_WRITE_TOKEN');
-        /*if ($request->hasFile('foto')) {
+        if ($request->hasFile('foto')) {
             $file = $request->file('foto');
+
+            \Log::info('Token:', ['token' => env('BLOB_READ_WRITE_TOKEN')]);
+            \Log::info('File Upload:', ['file' => $file->getClientOriginalName()]);
+
 
             // Unggah ke Vercel Blob
             return env('BLOB_READ_WRITE_TOKEN');
-            $response = Http::withHeaders([
+            /*$response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
             ])->attach(
                 'file', file_get_contents($file->getRealPath()), $file->getClientOriginalName()
@@ -58,10 +61,10 @@ class BungaController extends Controller
                 $validate['foto'] = $blobData['url']; // Simpan URL blob ke database
             } else {
                 return response()->json(['error' => 'Failed to upload to Vercel Blob'], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
+            }*/
         }
 
-        $result = Bunga::create($validate); //simpan ke tabel bunga
+        $/*result = Bunga::create($validate); //simpan ke tabel bunga
         if($result){
             $data['success'] = true;
             $data['message'] = "Bunga berhasil disimpan";
