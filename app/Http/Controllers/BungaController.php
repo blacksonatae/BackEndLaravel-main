@@ -6,6 +6,9 @@ use App\Models\Bunga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+
+
 class BungaController extends Controller
 {
     /**
