@@ -130,17 +130,18 @@ class BungaController extends Controller
      */
     public function destroy(Bunga $bunga)
     {
-        $bunga = Bunga::find($bunga->id);
+        $bungas = Bunga::find($bunga->id);
 
-        $filePath = 'public/'. $bunga->foto;
-
-        if($bunga){
+        $fileUrl = $bungas->foto;
+        
+        if($bungas){
             // Hapus gambar lama
-            if (Storage::exists($filePath)) {
-                Storage::delete($filePath);
-            }
+            $publicId = substr($fileUrl, strpos($fileUrl, 'uploads/bunga/'), strrpos($fileUrl, '.') - strpos($fileUrl, 'uploads/bunga/'));
 
-            $bunga->delete();
+            // Hapus file lama di Cloudinary
+            Cloudinary::destroy($publicId);
+
+            $bungas->delete();
             $data["success"] = true;
             $data["message"] = "Data bunga berhasil dihapus";
             return response()->json($data, Response::HTTP_OK);
