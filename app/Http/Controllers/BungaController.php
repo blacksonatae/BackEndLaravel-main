@@ -133,7 +133,7 @@ class BungaController extends Controller
         $bungas = Bunga::find($bunga->id);
 
         $fileUrl = $bungas->foto;
-        
+
         if($bungas){
             // Hapus gambar lama
             $publicId = substr($fileUrl, strpos($fileUrl, 'uploads/bunga/'), strrpos($fileUrl, '.') - strpos($fileUrl, 'uploads/bunga/'));
