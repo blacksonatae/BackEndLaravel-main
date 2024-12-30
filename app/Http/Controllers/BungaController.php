@@ -88,7 +88,7 @@ class BungaController extends Controller
         ]);
 
         $bungas = Bunga::find($id);
-        
+
         if (!$bungas) {
             return response()->json([
                 'success' => false,
@@ -99,10 +99,11 @@ class BungaController extends Controller
         // Hapus gambar lama di Cloudinary jika ada
         if ($bungas->foto) {
             $publicId = basename($bungas->foto, '.' . pathinfo($bungas->foto, PATHINFO_EXTENSION));
-            Cloudinary::destroy($publicId);
+            return $publicId;
+            /*Cloudinary::destroy($publicId);*/
         }
 
-        // Upload gambar baru ke Cloudinary
+        /*// Upload gambar baru ke Cloudinary
         $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath(), [
             'folder' => 'uploads/bunga',
         ]);
@@ -117,7 +118,7 @@ class BungaController extends Controller
             $data['success'] = true;
             $data['message'] = "Data bunga berhasil diupdate";
             $data['result'] = $result;
-            return response()->json($data, Response::HTTP_OK);
+            return response()->json($data, Response::HTTP_OK);*/
         }
     }
 
