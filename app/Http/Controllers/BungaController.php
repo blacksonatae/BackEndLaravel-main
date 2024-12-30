@@ -47,7 +47,7 @@ class BungaController extends Controller
 
             // Unggah ke Vercel Blob
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer vercel_blob_rw_mkS273K3ipvlcSNt_o93JRLflyFyYbcirzjbs059X8QhSHC',
+                'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
             ])->attach(
                 'file', file_get_contents($file->getRealPath()), $file->getClientOriginalName()
             )->post('https://api.vercel.com/v1/blob');
