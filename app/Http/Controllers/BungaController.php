@@ -82,7 +82,7 @@ class BungaController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $request->validate([
-            'foto' => 'required|file|max:5000',
+            'foto' => 'file|max:5000',
             'nama_bunga' => 'required',
             'deskripsi' => 'required|max:10000'
         ]);
